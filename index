@@ -2,11 +2,44 @@
 
 <head>
 	<title> Hello, World! </title>
+	
+	<script type="text/javascript">
+
+	var nombre= "Darvis Peña";
+	console.log(nombre);
+	//alert(nombre);
+	//ciclo(1000000000000);
+	
+	function ciclo(hasta)
+	{
+		//var suma = 0;
+		var reductor = (hasta +1)*(hasta/2);
+		
+		/*for(var i=0; i<=hasta; i++)
+		{
+			
+			suma = (hasta +1)*(hasta/2);
+			
+		};*/
+		
+		console.log(reductor);
+	};
+	
+	function recorrer()
+	{
+		var numero = document.getElementById("Numero").value;
+		ciclo(numero);
+		//console.log(numero);
+	};
+	
+</script>
 </head>
 
 <body>
 
-Hola Darvis Peña
+<input Id="Numero">
+<button onclick="recorrer();">Correr</button>
+
 
 </body>
 
