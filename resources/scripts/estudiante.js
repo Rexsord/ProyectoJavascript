@@ -16,12 +16,12 @@
 	
 		//Objeto Estudiante
 		var est1 = new Estudiante();												//Crear objeto para llenarlo a través del formulario
-		est1.id = document.getElementById("ID").value;								//Obtener los datos del formulario
-		est1.nombre = document.getElementById("Nombre").value;
-		est1.matricula = document.getElementById("Matricula").value;
-		est1.identificacion = document.getElementById("Identificacion").value;
-		est1.telefono = document.getElementById("Telefono").value;
-		est1.email = document.getElementById("Email").value;
+		est1.id = document.getElementById("inputId").value;								//Obtener los datos del formulario
+		est1.nombre = document.getElementById("inputNombre").value;
+		est1.matricula = document.getElementById("inputMatricula").value;
+		est1.identificacion = document.getElementById("inputIdent").value;
+		est1.telefono = document.getElementById("inputTel").value;
+		est1.email = document.getElementById("inputEmail").value;
 		
 		//Creación de la tabla
 		var table = document.getElementById("estudiantes");							
