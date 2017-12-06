@@ -1,60 +1,130 @@
-	//<script>
-	var Estudiante = function()
-		{
-			var self = this;
-			self.id = "";
-			self.nombre = "";
-			self.matricula = "";
-			self.identificacion = "";
-			self.telefono = "";
-			self.email = "";
-		};
-	
-	
-	function addRow()
-	{
-	
-		//Objeto Estudiante
-		var est1 = new Estudiante();												//Crear objeto para llenarlo a través del formulario
-		est1.id = document.getElementById("inputId").value;								//Obtener los datos del formulario
-		est1.nombre = document.getElementById("inputNombre").value;
-		est1.matricula = document.getElementById("inputMatricula").value;
-		est1.identificacion = document.getElementById("inputIdent").value;
-		est1.telefono = document.getElementById("inputTel").value;
-		est1.email = document.getElementById("inputEmail").value;
-		
-		//Creación de la tabla
-		var table = document.getElementById("estudiantes");							
-		var tr = document.createElement("tr");
-		
-		//Creación y vinculación de los datos
-		var tdId = document.createElement("td");
-		var txtId = document.createTextNode(est1.id);
-		var tdNombre = document.createElement("td");
-		var txtNombre = document.createTextNode(est1.nombre);
-		var tdMatricula = document.createElement("td");
-		var txtMatricula = document.createTextNode(est1.matricula);
-		var tdIdentificacion = document.createElement("td");
-		var txtIdentificacion = document.createTextNode(est1.identificacion);
-		var tdTelefono = document.createElement("td");
-		var txtTelefono = document.createTextNode(est1.telefono);
-		var tdEmail = document.createElement("td");
-		var txtEmail = document.createTextNode(est1.email);
-		
-		//Insercción en la tabla
-		tdId.appendChild(txtId);
-		tr.appendChild(tdId);
-		tdNombre.appendChild(txtNombre);
-		tr.appendChild(tdNombre);
-		tdMatricula.appendChild(txtMatricula);
-		tr.appendChild(tdMatricula);
-		tdIdentificacion.appendChild(txtIdentificacion);
-		tr.appendChild(tdIdentificacion);
-		tdTelefono.appendChild(txtTelefono);
-		tr.appendChild(tdTelefono);
-		tdEmail.appendChild(txtEmail);
-		tr.appendChild(tdEmail);
-		
-		table.appendChild(tr);
+
+var Estudiante = function () {
+	var self = this;
+	self.id = "";
+	self.nombre = "";
+	self.matricula = "";
+	self.ident = "";
+	self.tel = "";
+	self.email = "";
+};
+
+var seleccion;
+
+
+function agregarEstudiante(estudiante) {
+	var row = "<tr>"
+	//	+ "<td>" + "<input id = 'chk1' type='checkbox'>" + "</td>"
+		+ "<td>" + estudiante.id + "</td>"
+		+ "<td>" + estudiante.nombre + "</td>"
+		+ "<td>" + estudiante.matricula + "</td>"
+		+ "<td>" + estudiante.ident + "</td>"
+		+ "<td>" + estudiante.tel + "</td>"
+		+ "<td>" + estudiante.email + "</td>";
+
+	$("table tbody").append(row);
+}
+
+function guardarDB(estudiante) {
+	//Buscamos el controlador localStorage
+	myStorage = window.localStorage;
+
+	var estudiantesArray = [];
+
+	var dbEstudiantes = myStorage.getItem("estudiantesArray");
+	if (dbEstudiantes != null) {
+		estudiantesArray = JSON.parse(dbEstudiantes);
 	}
-	//</script>
+
+	estudiantesArray.push(estudiante);
+	myStorage.setItem("estudiantesArray", JSON.stringify(estudiantesArray));
+
+}
+
+function analizaDB() {
+
+
+	myStorage = window.localStorage;
+	var arreglo = [];
+
+	var dbEstudiantes = myStorage.getItem("estudiantesArray");
+	if (dbEstudiantes != null) {
+		arreglo = JSON.parse(dbEstudiantes);
+		
+		arreglo.splice(arreglo.indexOf(seleccion),6);
+
+	}
+
+	myStorage.setItem("estudiantesArray", JSON.stringify(arreglo));
+
+}
+
+function limpiaDB(){
+	
+	window.localStorage.clear();
+	
+
+}
+
+function cargarDB(){
+
+	myStorage = window.localStorage;
+	var dbEstudiantes = myStorage.getItem("estudiantesArray")
+	if (dbEstudiantes != null) {
+		var estudiantesArray = JSON.parse(dbEstudiantes);
+
+		$.each(estudiantesArray, function (i, est) {
+			agregarEstudiante(est);
+		});
+	}
+
+}
+
+
+$(document).ready(function () {
+
+
+
+	cargarDB();
+
+	$("#estudiantes tr").click(function(){    
+		seleccion = $(this).find('td:first').html();
+		//alert(seleccion);    
+	 });
+
+
+	$("#Registrar").click(function () {
+
+		var id = $("#inputId").val();
+		var nombre = $("#inputNombre").val();
+		var matricula = $("#inputMatricula").val();
+		var ident = $("#inputIdent").val();
+		var tel = $("#inputTel").val();
+		var email = $("#inputEmail").val();
+
+		var est = new Estudiante();
+		est.id = id;
+		est.nombre = nombre;
+		est.matricula = matricula;
+		est.ident = ident;
+		est.tel = tel;
+		est.email = email;
+
+		agregarEstudiante(est);
+		guardarDB(est);
+	});
+
+	$("#Eliminar").click(function () {
+
+		analizaDB();
+	
+
+	});
+
+	$("#Limpiar").click(function () {
+		
+				limpiaDB();
+	
+			});
+
+});
