@@ -47,33 +47,33 @@ function guardarDB(estudiante) {
 function analizaDB(id) {
 
 	var dbEstudiantes = localStorage.getItem('estudiantesArray');
-	//localStorage.removeItem("estudiantesArray");
 
 	if (dbEstudiantes != null) {
 		var arreglo = JSON.parse(dbEstudiantes);
+		borraEstudiante(id,arreglo);
 
-		for (var i = 0; i < arreglo.length; i++) {
-
-			if (arreglo[i].id == id) {
-
-				arreglo.splice(i, 1);
-				var fila = document.getElementById("tr"+id).rowIndex-1; 
-				if (typeof foo !== 'undefined') {
-					document.getElementById("estudiantesArray").deleteRow(fila);
-				  }
-				
-				estudiantesArray = arreglo;
-				localStorage.setItem('estudiantesArray', JSON.stringify(estudiantesArray));
-				break;
-			}
-
-		}
 	}
 
 };
 
+function borraEstudiante(id, arreglo) {
+	for (var i = 0; i < arreglo.length; i++) {
 
+		if (arreglo[i].id == id) {
 
+			arreglo.splice(i, 1);
+			var fila = document.getElementById("tr" + id).rowIndex - 1;
+			if (typeof foo !== 'undefined') {
+				document.getElementById("estudiantesArray").deleteRow(fila);
+			}
+
+			estudiantesArray = arreglo;
+			localStorage.setItem('estudiantesArray', JSON.stringify(estudiantesArray));
+			break;
+		}
+
+	}
+};
 
 
 function limpiaDB() {
