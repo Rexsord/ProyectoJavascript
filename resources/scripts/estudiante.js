@@ -69,6 +69,7 @@ function borraEstudiante(id, arreglo) {
 
 			estudiantesArray = arreglo;
 			localStorage.setItem('estudiantesArray', JSON.stringify(estudiantesArray));
+			location.reload();
 			break;
 		}
 
