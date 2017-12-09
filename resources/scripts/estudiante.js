@@ -1,4 +1,6 @@
 
+var estudiantesArray = [];
+
 var Estudiante = function () {
 	var self = this;
 	self.id = "";
@@ -13,14 +15,15 @@ var seleccion;
 
 
 function agregarEstudiante(estudiante) {
-	var row = "<tr>"
-	//	+ "<td>" + "<input id = 'chk1' type='checkbox'>" + "</td>"
+	var row = '<tr id ="tr' + estudiante.id + '">'
+		+ "<td>" + '<input id = "' + estudiante.id + '" type="checkbox">' + "</td>"
 		+ "<td>" + estudiante.id + "</td>"
 		+ "<td>" + estudiante.nombre + "</td>"
 		+ "<td>" + estudiante.matricula + "</td>"
 		+ "<td>" + estudiante.ident + "</td>"
 		+ "<td>" + estudiante.tel + "</td>"
-		+ "<td>" + estudiante.email + "</td>";
+		+ "<td>" + estudiante.email + "</td>"
+		+ "</tr>"
 
 	$("table tbody").append(row);
 }
@@ -29,7 +32,6 @@ function guardarDB(estudiante) {
 	//Buscamos el controlador localStorage
 	myStorage = window.localStorage;
 
-	var estudiantesArray = [];
 
 	var dbEstudiantes = myStorage.getItem("estudiantesArray");
 	if (dbEstudiantes != null) {
@@ -41,32 +43,49 @@ function guardarDB(estudiante) {
 
 }
 
-function analizaDB() {
+function graba() {
+	localStorage.setItem('estudiantesArray', JSON.stringify(estudiantesArray));
+};
 
+function analizaDB(id) {
 
-	myStorage = window.localStorage;
-	var arreglo = [];
+	var dbEstudiantes = localStorage.getItem('estudiantesArray');
+	//localStorage.removeItem("estudiantesArray");
 
-	var dbEstudiantes = myStorage.getItem("estudiantesArray");
 	if (dbEstudiantes != null) {
-		arreglo = JSON.parse(dbEstudiantes);
-		
-		arreglo.splice(arreglo.indexOf(seleccion),6);
+		var arreglo = JSON.parse(dbEstudiantes);
 
+		for (var i = 0; i < arreglo.length; i++) {
+
+			if (arreglo[i].id == id) {
+
+				arreglo.splice(i, 1);
+				var fila = document.getElementById("tr"+id).rowIndex-1; 
+				if (typeof foo !== 'undefined') {
+					document.getElementById("estudiantesArray").deleteRow(fila);
+				  }
+				
+				estudiantesArray = arreglo;
+				graba();
+				break;
+			}
+
+		}
 	}
 
-	myStorage.setItem("estudiantesArray", JSON.stringify(arreglo));
+};
 
-}
 
-function limpiaDB(){
-	
+
+
+function limpiaDB() {
+
 	window.localStorage.clear();
-	
 
-}
 
-function cargarDB(){
+};
+
+function cargarDB() {
 
 	myStorage = window.localStorage;
 	var dbEstudiantes = myStorage.getItem("estudiantesArray")
@@ -78,53 +97,49 @@ function cargarDB(){
 		});
 	}
 
-}
+};
 
 
 $(document).ready(function () {
 
 
+	//cargarDB();
 
-	cargarDB();
+	myStorage = window.localStorage;
+	var dbEstudiantes = myStorage.getItem("estudiantesArray")
+	if (dbEstudiantes != null) {
+		var estudiantesArray = JSON.parse(dbEstudiantes);
 
-	$("#estudiantes tr").click(function(){    
-		seleccion = $(this).find('td:first').html();
-		//alert(seleccion);    
-	 });
+		$.each(estudiantesArray, function (i, est) {
+			agregarEstudiante(est);
+		});
+	}
 
 
 	$("#Registrar").click(function () {
 
-		var id = $("#inputId").val();
-		var nombre = $("#inputNombre").val();
-		var matricula = $("#inputMatricula").val();
-		var ident = $("#inputIdent").val();
-		var tel = $("#inputTel").val();
-		var email = $("#inputEmail").val();
-
 		var est = new Estudiante();
-		est.id = id;
-		est.nombre = nombre;
-		est.matricula = matricula;
-		est.ident = ident;
-		est.tel = tel;
-		est.email = email;
+		est.id = $("#inputId").val();
+		est.nombre = $("#inputNombre").val();
+		est.matricula = $("#inputMatricula").val();
+		est.ident = $("#inputIdent").val();
+		est.tel = $("#inputTel").val();
+		est.email = $("#inputEmail").val();
 
 		agregarEstudiante(est);
 		guardarDB(est);
 	});
 
-	$("#Eliminar").click(function () {
+	$("#Limpiar").click(function () {
 
-		analizaDB();
-	
+		limpiaDB();
 
 	});
 
-	$("#Limpiar").click(function () {
-		
-				limpiaDB();
-	
-			});
+	$("#Eliminar").click(function () {
+		$("input:checkbox:checked").each(function () {
+			analizaDB($(this).attr("id"));
+		});
+	});
 
 });
