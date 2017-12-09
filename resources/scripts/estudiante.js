@@ -43,9 +43,6 @@ function guardarDB(estudiante) {
 
 }
 
-function graba() {
-	localStorage.setItem('estudiantesArray', JSON.stringify(estudiantesArray));
-};
 
 function analizaDB(id) {
 
@@ -66,7 +63,7 @@ function analizaDB(id) {
 				  }
 				
 				estudiantesArray = arreglo;
-				graba();
+				localStorage.setItem('estudiantesArray', JSON.stringify(estudiantesArray));
 				break;
 			}
 
@@ -74,6 +71,7 @@ function analizaDB(id) {
 	}
 
 };
+
 
 
 
@@ -103,17 +101,8 @@ function cargarDB() {
 $(document).ready(function () {
 
 
-	//cargarDB();
+	cargarDB();
 
-	myStorage = window.localStorage;
-	var dbEstudiantes = myStorage.getItem("estudiantesArray")
-	if (dbEstudiantes != null) {
-		var estudiantesArray = JSON.parse(dbEstudiantes);
-
-		$.each(estudiantesArray, function (i, est) {
-			agregarEstudiante(est);
-		});
-	}
 
 
 	$("#Registrar").click(function () {
